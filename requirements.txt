@@ -1,0 +1,13 @@
+langgraph==1.2.14
+langgraph-checkpoint-sqlite==3.1.1
+langchain-google-genai==4.4.0
+langchain[mcp]==1.4.4
+fastmcp==4.1.3
+langfuse==4.17.0
+httpx==0.28.1
+fastapi==0.156.1
+uvicorn==0.54.0
+langgraph-checkpoint-postgres==3.2.0
+psycopg[binary]==3.3.6
+# The fixer runs the bug repo's tests with pytest, so it ships in the image too.
+pytest==9.1.1

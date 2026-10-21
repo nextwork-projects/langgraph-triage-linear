@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.db
+*.db-shm
+*.db-wal
+runbooks/
+.env
+.pytest_cache/
+webhooks.jsonl
+*.log

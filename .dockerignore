@@ -1,0 +1,13 @@
+.git
+.gitignore
+.venv
+.env
+__pycache__/
+.pytest_cache/
+tests/
+*.db
+*.db-shm
+*.db-wal
+runbooks/
+*.log
+webhooks.jsonl

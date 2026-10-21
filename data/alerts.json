@@ -1,0 +1,16 @@
+[
+  {
+    "id": "INC-2041",
+    "service": "checkout-api",
+    "fired_at": "2026-10-09T14:15:00Z",
+    "title": "checkout-api 5xx rate above 15%",
+    "description": "checkout-api is returning HTTP 500 on POST /checkout for about 1 in 6 requests since 14:12 UTC. Customers cannot complete orders."
+  },
+  {
+    "id": "INC-2042",
+    "service": "search-api",
+    "fired_at": "2026-10-09T09:40:00Z",
+    "title": "search-api p95 latency above SLO",
+    "description": "search-api p95 latency has crept from 410 ms to 690 ms over the last 2 hours (SLO 600 ms). Error rate is normal and searches still return results."
+  }
+]

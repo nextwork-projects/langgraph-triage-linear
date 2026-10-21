@@ -1,0 +1,36 @@
+{"ts": "2026-10-09T07:25:00Z", "service": "search-api", "level": "INFO", "message": "GET /search 200 405ms cache=hit"}
+{"ts": "2026-10-09T07:30:12Z", "service": "search-api", "level": "INFO", "message": "Deploy d-1039 applied: result cache ttl=60s"}
+{"ts": "2026-10-09T08:05:41Z", "service": "search-api", "level": "INFO", "message": "GET /search 200 520ms cache=miss"}
+{"ts": "2026-10-09T08:30:02Z", "service": "search-index", "level": "WARN", "message": "query queue depth 48 (normal < 10)"}
+{"ts": "2026-10-09T09:10:15Z", "service": "search-api", "level": "WARN", "message": "cache hit rate 62% over last 15m (7d average 92%)"}
+{"ts": "2026-10-09T09:35:30Z", "service": "search-api", "level": "INFO", "message": "GET /search 200 688ms cache=miss"}
+{"ts": "2026-10-09T13:45:10Z", "service": "checkout-api", "level": "INFO", "message": "POST /checkout 200 182ms"}
+{"ts": "2026-10-09T13:50:44Z", "service": "payments-gateway", "level": "WARN", "message": "card network upstream slow: 1.8s"}
+{"ts": "2026-10-09T13:52:03Z", "service": "checkout-api", "level": "INFO", "message": "POST /checkout 200 1950ms"}
+{"ts": "2026-10-09T13:56:19Z", "service": "payments-gateway", "level": "WARN", "message": "card network upstream slow: 1.7s"}
+{"ts": "2026-10-09T13:59:58Z", "service": "payments-gateway", "level": "INFO", "message": "card network latency recovered: 380ms"}
+{"ts": "2026-10-09T14:00:31Z", "service": "checkout-api", "level": "INFO", "message": "POST /checkout 200 204ms"}
+{"ts": "2026-10-09T14:02:05Z", "service": "checkout-api", "level": "INFO", "message": "Deploy d-1042 applied: config reload"}
+{"ts": "2026-10-09T14:02:06Z", "service": "checkout-api", "level": "INFO", "message": "HikariPool-1 - Starting with maximumPoolSize=5"}
+{"ts": "2026-10-09T14:02:07Z", "service": "orders-db", "level": "INFO", "message": "connections from checkout-api dropped 41 -> 5"}
+{"ts": "2026-10-09T14:05:12Z", "service": "checkout-api", "level": "INFO", "message": "POST /checkout 200 231ms"}
+{"ts": "2026-10-09T14:09:40Z", "service": "checkout-api", "level": "WARN", "message": "HikariPool-1 - Thread starvation or clock leap detected"}
+{"ts": "2026-10-09T14:11:58Z", "service": "checkout-api", "level": "WARN", "message": "HikariPool-1 - pool stats (total=5, active=5, idle=0, waiting=9)"}
+{"ts": "2026-10-09T14:12:03Z", "service": "checkout-api", "level": "ERROR", "message": "HikariPool-1 - Connection is not available, request timed out after 3000ms (total=5, active=5, idle=0, waiting=21)"}
+{"ts": "2026-10-09T14:12:03Z", "service": "checkout-api", "level": "ERROR", "message": "POST /checkout 500 3012ms SQLTransientConnectionException"}
+{"ts": "2026-10-09T14:12:30Z", "service": "web-frontend", "level": "WARN", "message": "checkout request failed: upstream 500"}
+{"ts": "2026-10-09T14:13:11Z", "service": "checkout-api", "level": "ERROR", "message": "HikariPool-1 - Connection is not available, request timed out after 3000ms (total=5, active=5, idle=0, waiting=37)"}
+{"ts": "2026-10-09T14:13:11Z", "service": "checkout-api", "level": "ERROR", "message": "POST /checkout 500 3008ms SQLTransientConnectionException"}
+{"ts": "2026-10-09T14:13:50Z", "service": "checkout-api", "level": "INFO", "message": "POST /checkout 200 2870ms"}
+{"ts": "2026-10-09T14:14:02Z", "service": "orders-db", "level": "INFO", "message": "active connections 6/200, cpu 11%"}
+{"ts": "2026-10-09T14:14:20Z", "service": "checkout-api", "level": "ERROR", "message": "HikariPool-1 - Connection is not available, request timed out after 3000ms (total=5, active=5, idle=0, waiting=41)"}
+{"ts": "2026-10-09T14:14:20Z", "service": "checkout-api", "level": "ERROR", "message": "POST /checkout 500 3010ms SQLTransientConnectionException"}
+{"ts": "2026-10-09T14:15:00Z", "service": "web-frontend", "level": "WARN", "message": "checkout request failed: upstream 500"}
+{"ts": "2026-10-09T14:16:45Z", "service": "checkout-api", "level": "ERROR", "message": "HikariPool-1 - Connection is not available, request timed out after 3000ms (total=5, active=5, idle=0, waiting=39)"}
+{"ts": "2026-10-09T14:17:33Z", "service": "checkout-api", "level": "INFO", "message": "GET /health 200 3ms"}
+{"ts": "2026-10-09T14:18:02Z", "service": "payments-gateway", "level": "INFO", "message": "POST /authorize 200 372ms"}
+{"ts": "2026-10-09T14:20:04Z", "service": "inventory-api", "level": "INFO", "message": "Deploy d-1043 applied: reservation metrics enabled"}
+{"ts": "2026-10-09T14:20:41Z", "service": "checkout-api", "level": "ERROR", "message": "POST /checkout 500 3004ms SQLTransientConnectionException"}
+{"ts": "2026-10-09T14:21:15Z", "service": "orders-db", "level": "INFO", "message": "active connections 6/200, cpu 10%"}
+{"ts": "2026-10-09T14:22:09Z", "service": "inventory-api", "level": "INFO", "message": "GET /stock 200 41ms"}
+{"ts": "2026-10-09T14:23:30Z", "service": "checkout-api", "level": "ERROR", "message": "HikariPool-1 - Connection is not available, request timed out after 3000ms (total=5, active=5, idle=0, waiting=40)"}

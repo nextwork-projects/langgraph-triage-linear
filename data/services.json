@@ -1,0 +1,47 @@
+{
+  "checkout-api": {
+    "team": "payments",
+    "on_call": "@payments-oncall",
+    "depends_on": [
+      "orders-db",
+      "payments-gateway"
+    ]
+  },
+  "payments-gateway": {
+    "team": "billing",
+    "on_call": "@billing-oncall",
+    "depends_on": []
+  },
+  "orders-db": {
+    "team": "platform-data",
+    "on_call": "@platform-data-oncall",
+    "depends_on": []
+  },
+  "search-api": {
+    "team": "discovery",
+    "on_call": "@discovery-oncall",
+    "depends_on": [
+      "search-index"
+    ]
+  },
+  "search-index": {
+    "team": "discovery",
+    "on_call": "@discovery-oncall",
+    "depends_on": []
+  },
+  "inventory-api": {
+    "team": "fulfillment",
+    "on_call": "@fulfillment-oncall",
+    "depends_on": [
+      "orders-db"
+    ]
+  },
+  "web-frontend": {
+    "team": "web",
+    "on_call": "@web-oncall",
+    "depends_on": [
+      "checkout-api",
+      "search-api"
+    ]
+  }
+}

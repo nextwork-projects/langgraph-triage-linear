@@ -1,0 +1,37 @@
+[
+  {
+    "id": "d-1038",
+    "service": "orders-db",
+    "team": "platform-data",
+    "deployed_at": "2026-10-07T10:00:00Z",
+    "change": "Upgrade Postgres minor version 16.4 -> 16.6"
+  },
+  {
+    "id": "d-1039",
+    "service": "search-api",
+    "team": "discovery",
+    "deployed_at": "2026-10-09T07:30:00Z",
+    "change": "Lower search result cache TTL from 600s to 60s so stock counts look fresher"
+  },
+  {
+    "id": "d-1041",
+    "service": "web-frontend",
+    "team": "web",
+    "deployed_at": "2026-10-09T13:30:00Z",
+    "change": "Update checkout button copy"
+  },
+  {
+    "id": "d-1042",
+    "service": "checkout-api",
+    "team": "payments",
+    "deployed_at": "2026-10-09T14:02:00Z",
+    "change": "Tune DB connection pool: maximumPoolSize 50 -> 5 to reduce idle connections on orders-db"
+  },
+  {
+    "id": "d-1043",
+    "service": "inventory-api",
+    "team": "fulfillment",
+    "deployed_at": "2026-10-09T14:20:00Z",
+    "change": "Add stock reservation metrics"
+  }
+]
