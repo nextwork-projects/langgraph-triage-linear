@@ -1,11 +1,9 @@
 """Secret Mission: an agent reads Linear through its MCP server, with read-only tools.
 
-Every write still goes through linear.py. This agent can only look: it gets the
-tools from https://mcp.linear.app/mcp/readonly, using a second Linear API key
-that has only the Read permission. Linear's MCP server takes that key as a
-Bearer token (the GraphQL API takes the write key with no prefix).
-
-Turns on when LINEAR_READONLY_KEY is set.
+Every write still goes through linear.py. This agent can only look: it gets its
+tools from https://mcp.linear.app/mcp/readonly, which offers only read tools
+(get_, list_ and search_), so the same LINEAR_API_KEY is safe to send. Linear's
+MCP server takes that key as a Bearer token (the GraphQL API takes it with no prefix).
 """
 import asyncio
 import os
@@ -17,7 +15,7 @@ READONLY_URL = "https://mcp.linear.app/mcp/readonly"
 
 
 def configured() -> bool:
-    return bool(os.environ.get("LINEAR_READONLY_KEY"))
+    return bool(os.environ.get("LINEAR_API_KEY"))
 
 
 def adapter(target=None):
@@ -28,7 +26,7 @@ def adapter(target=None):
     from langchain.mcp import MCPAdapter
 
     if target is None:
-        target = Client(READONLY_URL, auth=os.environ["LINEAR_READONLY_KEY"])  # sent as Authorization: Bearer
+        target = Client(READONLY_URL, auth=os.environ["LINEAR_API_KEY"])  # sent as Authorization: Bearer
     return MCPAdapter(target)
 
 
@@ -40,7 +38,7 @@ async def _history(model, service: str, incident_issue: str, target=None) -> str
         tools = await adapter(target).list_tools()
     except MCPError as error:
         # A bad or missing key shows up as a generic server error, not a 401.
-        raise RuntimeError(f"Linear MCP refused the connection. Check LINEAR_READONLY_KEY. ({error})")
+        raise RuntimeError(f"Linear MCP refused the connection. Check LINEAR_API_KEY. ({error})")
     agent = create_agent(
         model,
         tools,

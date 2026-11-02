@@ -15,9 +15,9 @@ Every write to Linear and GitHub is plain code in a graph node. The models only 
 | Part | How |
 |---|---|
 | Linear setup, run from an issue, sub-issues across teams, webhook resume, two approvals at once, Cloud Run + Cloud SQL, retry after a redeploy | Live on TRI-5 to TRI-8, 2026-10-20 |
-| Fix PR (`fixer.py`, `open_fix_pr`) | Offline only: a fake GitHub, a mock transport for the REST calls, and the real test gate in a subprocess |
-| Linear's PR automations (Fixing on open, Done on merge) on the Free plan | Not tested |
-| Read-only MCP agent (`linear_mcp.py`) | Offline only: `MCPAdapter` against a local FastMCP server, with the Bearer key checked over HTTP in a separate test |
+| Fix PR (`fixer.py`, `open_fix_pr`, `fix_route`) | Live on Cloud Run, 2026-11-02: a tested PR, a blocked fix, and a retry that reused the open PR. Offline too: a fake GitHub, a mock transport for the REST calls, and the real test gate in a subprocess |
+| Linear's PR automations (Fixing on open, Done on merge) on the Free plan | Live, 2026-11-02 |
+| Read-only MCP agent (`linear_mcp.py`) | Live on Cloud Run, 2026-11-02, with `LINEAR_API_KEY` on `/mcp/readonly`. Offline too: `MCPAdapter` against a local FastMCP server, with the Bearer key checked over HTTP in a separate test |
 | Dedicated service account, `teardown.sh` | Not run yet |
 
 
@@ -59,7 +59,7 @@ set -a && . ./.env && set +a
 python linear_setup.py   # safe to run again
 ```
 
-In Linear, open **Settings > Teams > Incidents > Workflows & automations** and set the pull request automations: **Fixing** when a PR opens, **Done** when it merges. Install Linear's GitHub app on your `triage-services` repo.
+In Linear, open **Settings > Teams > Incidents > Workflows & automations** and set the pull request automations: **Fixing** when a PR opens, **Done** when it merges, and remove the review automation. Install Linear's GitHub app on your `triage-services` repo.
 
 ## Run locally
 

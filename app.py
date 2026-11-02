@@ -430,9 +430,10 @@ def approval_gate(task: ActionTask):
 def open_fix_pr(state: IncidentState):
     """After the gates: one fix PR for the first approved action on a service in the fix repo.
 
-    It runs before publish_runbook, so the runbook can say where the fix is. Its
-    comment is its last write, and propose_fix looks for an existing PR first, so
-    a retry neither repeats the model call nor opens a second PR.
+    A PR opened, or a blocked fix, ends the run (fix_route), so publish_runbook never
+    moves the incident to Done before the PR merges. Its comment is its last write,
+    and propose_fix looks for an existing PR first, so a retry neither repeats the
+    model call nor opens a second PR.
     """
     if not state.get("issue_id") or not fixer.configured() or state.get("fix"):
         return {}
@@ -447,20 +448,30 @@ def open_fix_pr(state: IncidentState):
     fix = fixer.propose_fix(
         build_patcher, state["incident_id"], state["analysis"], action, action.get("approval_issue", "")
     )
+    linear = linear_client()
     if fix["status"] == "opened":
         print(f"Fix PR: {fix['url']}")
         body = f"**Fix PR opened:** {fix['url']}\n\nThe repo's tests passed on the patch. Review it before you merge."
     else:
         print(f"Fix blocked: {fix['reason']}")
+        linear.move(state["issue_id"], INCIDENTS_TEAM, "Triage")  # the code fix needs a person
         body = (
             f"**Fix blocked:** {fix['reason']} No pull request was opened."
             + (f"\n\n```\n{fix['output']}\n```" if fix["output"] else "")
         )
-    linear_client().comment(state["issue_id"], body)
+    linear.comment(state["issue_id"], body)
     return {
         "fix": fix,
+        "status": f"fix_{fix['status']}",
         "audit_log": state["audit_log"] + [f"Fixer for {action['service']}: {fix['status']}."],
     }
+
+
+def fix_route(state: IncidentState):
+    """A fix PR, or a blocked fix, ends the run. Linear moves the incident when the PR merges."""
+    if state.get("fix"):
+        return END
+    return "publish_runbook"
 
 
 def runbook_markdown(state: IncidentState, heading: str, approved: list[dict], audit_log: list[str]) -> str:
@@ -525,14 +536,8 @@ def publish_runbook(state: IncidentState):
         # comment is the runbook. A fixture run (--alert) still writes the file.
         location = f"Linear issue {state['incident_id']}"
         audit_log = state["audit_log"] + decisions + [f"Published runbook to {location}."]
-        fix = state.get("fix") or {}
         linear = linear_client()
-        if fix.get("status") == "opened":
-            pass  # Linear's GitHub automation moves the incident: Fixing on PR open, Done on merge.
-        elif fix.get("status") == "blocked":
-            linear.move(state["issue_id"], INCIDENTS_TEAM, "Triage")  # the code fix needs a person
-        else:
-            linear.move(state["issue_id"], INCIDENTS_TEAM, "Done")
+        linear.move(state["issue_id"], INCIDENTS_TEAM, "Done")
         linear.comment(
             state["issue_id"],
             runbook_markdown(state, "**Runbook published**", approved, audit_log),
@@ -608,7 +613,7 @@ def build_graph(checkpointer):
         "report_findings", policy_route, ["approval_gate", "publish_runbook"]
     )
     builder.add_edge("approval_gate", "open_fix_pr")
-    builder.add_edge("open_fix_pr", "publish_runbook")
+    builder.add_conditional_edges("open_fix_pr", fix_route, ["publish_runbook", END])
     builder.add_edge("publish_runbook", END)
 
     return builder.compile(checkpointer=checkpointer)

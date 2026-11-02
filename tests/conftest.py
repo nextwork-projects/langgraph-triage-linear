@@ -108,6 +108,8 @@ class FakeLinear:
 
 @pytest.fixture
 def fake_linear(monkeypatch):
+    # recall_history reads Linear through MCP whenever LINEAR_API_KEY is set, so keep it offline.
+    monkeypatch.delenv("LINEAR_API_KEY", raising=False)
     linear = FakeLinear()
     monkeypatch.setattr(linear_api, "_client", linear)
     return linear

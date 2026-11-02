@@ -77,10 +77,11 @@ def test_approved_fix_opens_a_pr_linked_to_the_incident(github, fake_linear):
     assert pr["branch"] == "tri-5-fix-checkout-api"
     assert pr["body"].startswith("Fixes TRI-5\nRefs APR-1")
     assert pr["title"] == "TRI-5: Restore the checkout-api pool to 50"
-    assert out["fix"]["status"] == "opened"
+    assert out["fix"]["status"] == "opened" and out["status"] == "fix_opened"
     comments = [c[2] for c in fake_linear.of("comment")]
-    assert comments[-2].startswith("**Fix PR opened:** https://github.com/learner/triage-services/pull/1")
-    assert "Fix PR: https://github.com/learner/triage-services/pull/1" in comments[-1]
+    assert comments[-1].startswith("**Fix PR opened:** https://github.com/learner/triage-services/pull/1")
+    # The PR ends the run, so no runbook is published.
+    assert not any("**Runbook published**" in body for body in comments)
     # Linear's PR automation moves the incident from here, so the run doesn't move it to Done.
     assert [c[3] for c in fake_linear.of("move") if c[1] == "uuid-5"][-1] == "Awaiting Approval"
 
@@ -90,6 +91,7 @@ def test_a_patch_that_fails_the_tests_opens_no_pr(github, fakes, fake_linear):
     out = approve_both()
     assert github.opened == []
     assert out["fix"]["reason"] == "The repo's tests failed on the patch."
+    assert out["status"] == "fix_blocked"
     blocked = [c[2] for c in fake_linear.of("comment") if c[2].startswith("**Fix blocked:**")]
     assert "test_pool_serves_peak_checkout_traffic" in blocked[0]
     assert [c[3] for c in fake_linear.of("move") if c[1] == "uuid-5"][-1] == "Triage"

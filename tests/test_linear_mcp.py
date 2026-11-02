@@ -41,7 +41,7 @@ def test_the_agent_reads_past_incidents_through_mcp():
 
 
 def test_the_history_reaches_the_router(fakes, fake_linear, monkeypatch):
-    monkeypatch.setenv("LINEAR_READONLY_KEY", "lin_api_read")
+    monkeypatch.setenv("LINEAR_API_KEY", "lin_api_read")
     monkeypatch.setattr(app, "build_model", scripted)
     monkeypatch.setattr(linear_mcp, "adapter", lambda target=None, _real=linear_mcp.adapter: _real(server))
     briefs = []
@@ -51,8 +51,8 @@ def test_the_history_reaches_the_router(fakes, fake_linear, monkeypatch):
     assert "Earlier incidents in Linear:\n- TRI-2" in briefs[0]
 
 
-def test_without_the_read_only_key_nothing_changes(fakes, fake_linear, monkeypatch):
-    monkeypatch.delenv("LINEAR_READONLY_KEY", raising=False)
+def test_without_the_linear_key_nothing_changes(fakes, fake_linear, monkeypatch):
+    monkeypatch.delenv("LINEAR_API_KEY", raising=False)
     with SqliteSaver.from_conn_string(app.DB_PATH) as cp:
         out = start(app.build_graph(cp))
     assert "history" not in out
@@ -60,7 +60,7 @@ def test_without_the_read_only_key_nothing_changes(fakes, fake_linear, monkeypat
 
 def test_the_mcp_agent_works_inside_the_streamed_run(fakes, fake_linear, monkeypatch):
     """run_graph streams with version="v3" and durability="sync", as the receiver does."""
-    monkeypatch.setenv("LINEAR_READONLY_KEY", "lin_api_read")
+    monkeypatch.setenv("LINEAR_API_KEY", "lin_api_read")
     monkeypatch.setattr(app, "build_model", scripted)
     monkeypatch.setattr(linear_mcp, "adapter", lambda target=None, _real=linear_mcp.adapter: _real(server))
     alert = app.load_json("alerts.json")[0]
